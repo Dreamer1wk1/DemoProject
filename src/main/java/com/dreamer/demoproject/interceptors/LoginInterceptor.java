@@ -1,6 +1,7 @@
 package com.dreamer.demoproject.interceptors;
 
 import com.dreamer.demoproject.util.JwtUtil;
+import com.dreamer.demoproject.util.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         //验证token
         try {
             Map<String, Object> claims = JwtUtil.parseToken(token);
+            //将解析后的数据存储在ThreadLocal中
+            ThreadLocalUtil.set(claims);
             return true;
         }
         catch (Exception e){
@@ -24,5 +27,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.setStatus(401);
             return false;
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        //情况ThreadLocal中的内容，放置内存泄露
+        ThreadLocalUtil.remove();
     }
 }

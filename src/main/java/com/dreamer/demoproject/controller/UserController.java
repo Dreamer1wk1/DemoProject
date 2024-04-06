@@ -5,12 +5,11 @@ import com.dreamer.demoproject.pojo.User;
 import com.dreamer.demoproject.service.UserService;
 import com.dreamer.demoproject.util.JwtUtil;
 import com.dreamer.demoproject.util.Md5Util;
+import com.dreamer.demoproject.util.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +50,13 @@ public class UserController {
             return Result.success(token);
         }
         return Result.error("密码错误");
+    }
+    @GetMapping("/userInfo")
+    public Result<User> userInfo(){
+        //根据用户名查询用户
+        Map<String,Object>map=ThreadLocalUtil.get();
+        User u=userService.findByUserName((String)map.get("username"));
+        return Result.success(u);
     }
 }
 
