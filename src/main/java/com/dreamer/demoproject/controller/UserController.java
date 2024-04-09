@@ -58,5 +58,12 @@ public class UserController {
         User u=userService.findByUserName((String)map.get("username"));
         return Result.success(u);
     }
+    @PutMapping("/update")
+    //PUT 请求通常用于更新现有资源的内容或状态
+    //POST 请求通常用于创建新资源或提交数据
+    public Result update(@RequestBody /*从请求体中读取数据，并将其转换为方法参数的类型*/@Validated User user){
+        userService.update(user);
+        return Result.success();
+    }
 }
 
