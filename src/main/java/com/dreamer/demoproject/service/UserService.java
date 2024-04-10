@@ -9,4 +9,8 @@ public interface UserService {
     void register(String username,String password);
     //更新信息
     void update(User user);
+    //更新头像
+    void updateAvatar(String avatarUrl);
+    //更新密码
+    void updatePwd(String newPwd);
 }
